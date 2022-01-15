@@ -1,0 +1,125 @@
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+#sparktimer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sparktimer {
+  --dark-color: #444;
+  --grey-color: #e8e8e8;
+  --dimmed-color: #e0e0e0;
+
+  font-family: Inconsolata, sans-serif;
+  max-width: 800px;
+  width: 80%;
+}
+
+.timers {
+  display: flex;
+  flex-direction: column;
+}
+
+.timer {
+  font-size: 20px;
+  border: 1px solid var(--dark-color);
+  height: 60px;
+
+  width: 100%;
+  margin-top: 25px;
+  position: relative;
+}
+
+.timer.current {
+  font-weight: bold;
+}
+
+.timer.pending {
+  color: var(--dimmed-color);
+  border: 1px solid var(--dimmed-color);
+}
+
+.elapsed {
+  position: absolute;
+  right: 10px;
+}
+
+.progress, .content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.content {
+  z-index: 1;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress {
+  z-index: 0;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--grey-color);
+}
+
+.timer:first-child {
+  margin-top: 0;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  margin-top: 40px;
+}
+
+.control {
+  font-size: 14px;
+  color: var(--dark-color);
+  background-color: white;
+  padding: 10px 20px;
+  border: 1px solid var(--dark-color);
+
+  margin-left: 20px;
+}
+
+.control:first-child {
+  margin-left: 0;
+}
+
+.control:hover {
+  background-color: var(--grey-color);
+}
+
+.control:active {
+  color: white;
+  background-color: var(--dark-color);
+}
+
+.footer {
+  margin-top: 40px;
+  text-align: center;
+}
+
+a, a:visited {
+  color: var(--dark-color);
+}

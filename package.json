@@ -1,0 +1,26 @@
+{
+  "name": "sparktimer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lperrin/sparktimer.git"
+  },
+  "author": "lperrin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lperrin/sparktimer/issues"
+  },
+  "homepage": "https://github.com/lperrin/sparktimer#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.8",
+    "@babel/preset-react": "^7.16.7",
+    "babel-cli": "^6.26.0"
+  }
+}
