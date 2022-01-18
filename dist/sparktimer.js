@@ -12,7 +12,7 @@ const makeTimer = title => ({
 const DEFAULT_STATE = {
   status: 'initial',
   currentIndex: 0,
-  timers: [makeTimer('SOUND quality'), makeTimer('PERFORMANCE'), makeTimer('aTUNEd'), makeTimer('RYTHM'), makeTimer('KINETIC integration')]
+  timers: [makeTimer('SOUND'), makeTimer('PERFORMANCE'), makeTimer('ATTUNED Intonation'), makeTimer('RHYTHM'), makeTimer('KINETIC Integration'), makeTimer('PAUSE')]
 };
 
 function reducer(state, action) {
@@ -56,7 +56,7 @@ function tickReducer(state, {
   if (currentIndex < timers.length - 1) return updateState(tickedState, () => ({
     status: 'running'
   }), {
-    status: 'waiting',
+    status: 'running',
     currentIndex: currentIndex + 1
   }); // No next timer: end.
 
@@ -114,6 +114,11 @@ function updateState(state, timerUpdater, stateUpdate) {
 
 const SparkTimer = () => {
   const [state, dispatch] = React.useReducer(reducer, DEFAULT_STATE);
+  const {
+    timers,
+    status,
+    currentIndex
+  } = state;
   const onControl = React.useCallback(control => dispatch({
     type: 'control',
     control
@@ -139,14 +144,9 @@ const SparkTimer = () => {
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once
 
-  const {
-    timers,
-    status,
-    currentIndex
-  } = state;
   return /*#__PURE__*/React.createElement("div", {
     className: "sparktimer"
-  }, /*#__PURE__*/React.createElement(Timers, {
+  }, /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement(Timers, {
     timers: timers,
     currentIndex: currentIndex,
     status: status
@@ -181,7 +181,7 @@ const ControlButtons = ({
       return /*#__PURE__*/React.createElement("button", {
         className: "control",
         onClick: () => onControl('pause')
-      }, "Pause");
+      }, "Stop");
 
     case 'waiting':
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
@@ -216,12 +216,16 @@ const ControlButtons = ({
   }
 };
 
+const Header = () => /*#__PURE__*/React.createElement("div", {
+  className: "header"
+}, "\u26A1\uFE0F SPARK Practice Timer");
+
 const Footer = () => /*#__PURE__*/React.createElement("div", {
   className: "footer"
-}, "Made by ", /*#__PURE__*/React.createElement("a", {
+}, "\u26A1\uFE0F ", /*#__PURE__*/React.createElement("a", {
   href: "http://sparkpractice.com",
   target: "_blank"
-}, "Spark Practice"));
+}, "www.sparkpractice.com"));
 
 const Timers = ({
   timers,
@@ -263,10 +267,11 @@ function computeProgress(timer) {
 }
 
 function renderTimerRemaining(timer) {
-  const remaining = (timer.total - timer.elapsed) / 1000;
+  const remaining = Math.round((timer.total - timer.elapsed) / 1000);
   const minutes = Math.floor(remaining / 60);
   const seconds = Math.floor(remaining - minutes * 60);
-  return minutes === 0 ? `${seconds}s` : `${minutes}:${seconds}`;
+  const secondsStr = seconds < 10 ? `0${seconds}` : seconds.toString();
+  return minutes === 0 ? `${seconds}s` : `${minutes}:${secondsStr}`;
 }
 
 const domContainer = document.querySelector('#sparktimer-container');

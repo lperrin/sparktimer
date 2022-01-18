@@ -13,11 +13,12 @@ const DEFAULT_STATE = {
   status: 'initial',
   currentIndex: 0,
   timers: [
-    makeTimer('SOUND quality'),
+    makeTimer('SOUND'),
     makeTimer('PERFORMANCE'),
-    makeTimer('aTUNEd'),
-    makeTimer('RYTHM'),
-    makeTimer('KINETIC integration')
+    makeTimer('ATTUNED Intonation'),
+    makeTimer('RHYTHM'),
+    makeTimer('KINETIC Integration'),
+    makeTimer('PAUSE')
   ]
 }
 
@@ -61,7 +62,7 @@ function tickReducer(state, {delta}) {
   return updateState(
     tickedState,
     () => ({status: 'running'}),
-    {status: 'waiting', currentIndex: currentIndex + 1}
+    {status: 'running', currentIndex: currentIndex + 1}
   );
 
   // No next timer: end.
@@ -111,6 +112,7 @@ function updateState(state, timerUpdater, stateUpdate) {
 
 const SparkTimer = () => {
   const [state, dispatch] = React.useReducer(reducer, DEFAULT_STATE);
+  const {timers, status, currentIndex} = state;
 
   const onControl = React.useCallback((control) => dispatch({type: 'control', control}), []);
 
@@ -132,10 +134,9 @@ const SparkTimer = () => {
     return () => cancelAnimationFrame(requestRef.current);
   }, []); // Make sure the effect runs only once
 
-  const {timers, status, currentIndex} = state;
-
   return (
     <div className="sparktimer">
+      <Header />
       <Timers timers={timers} currentIndex={currentIndex} status={status} />
       <Controls status={status} onControl={onControl} />
       <Footer />
@@ -153,7 +154,7 @@ const ControlButtons = ({status, onControl}) => {
       return <button className="control" onClick={() => onControl('start')}>Start</button>;
 
     case 'running':
-      return <button className="control" onClick={() => onControl('pause')}>Pause</button>;
+      return <button className="control" onClick={() => onControl('pause')}>Stop</button>;
 
     case 'waiting':
       return (
@@ -180,9 +181,15 @@ const ControlButtons = ({status, onControl}) => {
   }
 };
 
+const Header = () => (
+  <div className="header">
+    ⚡️ SPARK Practice Timer
+  </div>
+);
+
 const Footer = () => (
   <div className="footer">
-    Made by <a href="http://sparkpractice.com" target="_blank">Spark Practice</a>
+    ⚡️ <a href="http://sparkpractice.com" target="_blank">www.sparkpractice.com</a>
   </div>
 )
 
@@ -213,11 +220,13 @@ function computeProgress(timer) {
 }
 
 function renderTimerRemaining(timer) {
-  const remaining = (timer.total - timer.elapsed) / 1000;
+  const remaining = Math.round((timer.total - timer.elapsed) / 1000);
   const minutes = Math.floor(remaining / 60);
   const seconds = Math.floor(remaining - minutes * 60);
 
-  return minutes === 0 ? `${seconds}s` : `${minutes}:${seconds}`;
+  const secondsStr = seconds < 10 ? `0${seconds}` : seconds.toString();
+
+  return minutes === 0 ? `${seconds}s` : `${minutes}:${secondsStr}`;
 }
 
 const domContainer = document.querySelector('#sparktimer-container');
