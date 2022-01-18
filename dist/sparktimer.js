@@ -1,5 +1,6 @@
 'use strict';
 
+const bell = new Audio('./bell.mp3');
 const BLOCK_DURATION = location.search.includes('test') ? 5 * 1000 : 5 * 60 * 1000;
 
 const makeTimer = title => ({
@@ -51,14 +52,18 @@ function tickReducer(state, {
     };
   }); // Timer still running.
 
-  if (getCurrentTimer(tickedState).status === 'running') return tickedState; // Wait for next timer if possible.
+  if (getCurrentTimer(tickedState).status === 'running') return tickedState;
+  bell.play(); // Wait for next timer if possible.
 
-  if (currentIndex < timers.length - 1) return updateState(tickedState, () => ({
-    status: 'running'
-  }), {
-    status: 'running',
-    currentIndex: currentIndex + 1
-  }); // No next timer: end.
+  if (currentIndex < timers.length - 1) {
+    return updateState(tickedState, () => ({
+      status: 'running'
+    }), {
+      status: 'running',
+      currentIndex: currentIndex + 1
+    });
+  } // No next timer: end.
+
 
   return { ...tickedState,
     status: 'ended'
@@ -70,11 +75,14 @@ function controlReducer(state, {
 }) {
   switch (control) {
     case 'start':
-      return updateState(state, () => ({
-        status: 'running'
-      }), {
-        status: 'running'
-      });
+      {
+        bell.play();
+        return updateState(state, () => ({
+          status: 'running'
+        }), {
+          status: 'running'
+        });
+      }
 
     case 'pause':
       return updateState(state, undefined, {
